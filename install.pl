@@ -59,7 +59,8 @@ These notebooks show the basics of Leaflet renderer
 `]),
     close(S_ExTutPath),
     
-    writeln('install done.').
+    writeln('install done.'),
+    halt.
 
 copy_resource(SwishDir, InstallDir, Relative) :-
     path(InstallDir, swish/Relative, SrcPath),

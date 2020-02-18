@@ -56,15 +56,15 @@ Render geomap data as an interactive Leaflet map.
 %   I'm pleased to see how easy is to pass JSON to
 %   js_script//1, using quasi-quotation
 %
-term_rendering(Term,_Vars,Options) -->
+term_rendering(_Term,_Vars,Options) -->
   {
     select_option(width(Width),Options,Options1,'400px'),
     select_option(height(Height),Options1,Options2,'400px'),
-    select_option(backgroundColor(BackgroundColor),Options2,Options3,ivory),
+    select_option(backgroundColor(BackgroundColor),Options2,_Options3,ivory),
 
     LlUrl='/plugin/leaflet/leaflet.js'
   },
-  html(div([ class(['render-leaflet']),
+  html(div([ id(mapid), class(['render-leaflet']),
         'data-render'('Leaflet geomap')
       ],
       [ \js_script({|javascript(LlUrl,Width,Height,BackgroundColor)||
@@ -81,11 +81,11 @@ term_rendering(Term,_Vars,Options) -->
     // just to inspect the render area
     $(l_cont).css('background-color', BackgroundColor)
 
-    require([LlUrl], function(cytoscape) {
-trace('running leaflet', Elements,Style,Layout)
+    require([LlUrl], function(L_r) {
+trace('running leaflet', L, L_r)
       try {
         var provider = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-        var mymap = L.map('mapid')..setView([51.505, -0.09], 13)
+        var mymap = L.map('mapid').setView([51.505, -0.09], 13)
         
         L.tileLayer(provider, {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
