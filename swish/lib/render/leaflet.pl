@@ -61,25 +61,20 @@ term_rendering(Term,_Vars,Options) -->
     select_option(width(Width),Options,Options1,'400px'),
     select_option(height(Height),Options1,Options2,'400px'),
     select_option(backgroundColor(BackgroundColor),Options2,Options3,ivory),
-    select_option(render_pairs(Render_pairs),Options3,_Options3,true),
-
-    parse_term(Term,Render_pairs,Elements,Style,Layout),
-
-    debug(swish_render_leaflet, 'elements:~w~nstyle:~w~nlayout:~w', [Elements,Style,Layout]),
 
     LlUrl='/plugin/leaflet/leaflet.js'
   },
   html(div([ class(['render-leaflet']),
         'data-render'('Leaflet geomap')
       ],
-      [ \js_script({|javascript(LlUrl,Elements,Style,Layout,Width,Height,BackgroundColor)||
+      [ \js_script({|javascript(LlUrl,Width,Height,BackgroundColor)||
 (function() {
   var trace = console.log
   if ($.ajaxScript) {
 
     var l_cont = $.ajaxScript.parent()
 
-    // cytoscape needs to know div size
+    // fix div size
     $(l_cont).css('height', Height)
     $(l_cont).css('width', Width)
 
@@ -93,7 +88,7 @@ trace('running leaflet', Elements,Style,Layout)
         var mymap = L.map('mapid')..setView([51.505, -0.09], 13)
         
         L.tileLayer(provider, {
-            //attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
             maxZoom: 18,
             id: 'mapid-layer',
             tileSize: 512,
@@ -110,6 +105,3 @@ trace('running leaflet', Elements,Style,Layout)
 })();
     |})
   ])).
-
-parse_term(_Term,_Render_pairs,_Elements,_Style,_Layout) :-
-  true.
